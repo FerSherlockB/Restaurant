@@ -1,0 +1,46 @@
+<app-dialog title=" {{ action }} Rubro ">
+  <form [formGroup]="suppliesCategoriesForm" novalidate>
+    <h2 class="mt-3 mb-2">Información básica</h2>
+    <!-- Denominación Input -->
+    <mat-form-field class="w-100 pb-2">
+      <mat-label>Denominación</mat-label>
+      <input matInput placeholder="Por favor indique la denominación." formControlName="denominacion" required>
+      <mat-error *ngIf="errorHandling('denominacion', 'required')">
+        Denominación es <strong>obligatorio</strong>.
+      </mat-error>
+    </mat-form-field>
+    <!-- Rubro padre Select -->
+    <mat-form-field class="w-100 pb-2">
+      <mat-label>Seleccione rubro padre</mat-label>
+      <mat-select formControlName="rubroPadre" [compareWith]="compareWith">
+        <mat-option *ngFor="let rubro of rubros" [value]="rubro">
+          {{rubro.denominacion}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <div class="d-flex pb-2">
+      <div class="flex-shrink-1">
+        <img onerror="this.src='assets/images/cards/card.jpg'" [src]="imagen.value">
+      </div>
+      <!-- Imagen URL Textarea -->
+      <div class="flex-grow-1 ml-3">
+        <mat-form-field class="w-100">
+          <mat-label>Imagen URL</mat-label>
+          <textarea matInput #imagen maxlength="255" placeholder="Por favor indique la url de la imagen."
+            formControlName="imagen"></textarea>
+          <mat-hint align="end">{{imagen.value?.length || 0}}/255</mat-hint>
+        </mat-form-field>
+      </div>
+    </div>
+    <!-- Oculto Checkbox -->
+    <mat-checkbox class="w-100" formControlName="oculto">
+      ¿Desea que el rubro sea privado?
+    </mat-checkbox>
+  </form>
+  <mat-dialog-actions align="end" class="mb-3">
+    <button mat-button [mat-dialog-close]="true">Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!suppliesCategoriesForm.valid" (click)="onAction()">
+      {{ action }}
+    </button>
+  </mat-dialog-actions>
+</app-dialog>

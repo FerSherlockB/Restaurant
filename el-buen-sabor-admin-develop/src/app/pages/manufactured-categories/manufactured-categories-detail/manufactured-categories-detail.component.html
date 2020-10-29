@@ -1,0 +1,13 @@
+<app-dialog title="Detalle categoría">
+  <div class="row py-3 mx-2">
+    <img onerror="this.src='assets/images/cards/card.jpg'" [src]="localData.imagen">
+    <div class="d-flex flex-column align-self-center ml-3">
+      <div>Codigo {{ localData.id | number }}</div>
+      <h1>{{ localData.denominacion }}</h1>
+      <div class="d-flex align-self-center">
+        <mat-icon class="material-icons mr-2" [class]="getPublicClass(localData.oculto)">stop_circle</mat-icon>
+        <p> {{ localData.oculto ? 'La categoría es privada' : ' La categoría es pública' }} </p>
+      </div>
+    </div>
+  </div>
+</app-dialog>

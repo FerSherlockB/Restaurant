@@ -1,0 +1,18 @@
+<app-dialog title="Detalle rubro">
+  <div class="row py-3 mx-2">
+    <img onerror="this.src='assets/images/cards/card.jpg'" [src]="localData.imagen">
+    <div class="d-flex flex-column align-self-center ml-3">
+      <div>Codigo {{ localData.id | number }}</div>
+      <h1>{{ localData.denominacion }}</h1>
+      <div class="d-flex align-items-center">
+        <span class="status-chip mr-3" *ngIf="localData.rubroPadre">
+          {{ localData.rubroPadre.denominacion }}
+        </span>
+        <div class="d-flex align-self-center">
+          <mat-icon class=" material-icons mr-2" [class]="getPublicClass(localData.oculto)">stop_circle</mat-icon>
+          <div> {{ localData.oculto ? 'El rubro es privado' : ' El rubro es público' }} </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</app-dialog>

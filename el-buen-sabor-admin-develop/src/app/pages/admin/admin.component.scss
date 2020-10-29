@@ -1,0 +1,44 @@
+h1 {
+  margin: auto;
+}
+
+.app-card {
+  border-radius: 15px;
+  background-color: white;
+  border: 1px solid #cccccc75;
+}
+
+.app-button {
+  cursor: pointer;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  padding: 1.5rem 1rem;
+  font-size: 24px;
+  margin: 5px;
+  border: 1px solid #cccccc75;
+  background-color: white;
+
+  &:hover {
+    transition: all 0.2s ease-out;
+    box-shadow: 0px 5px 10px rgba(38, 38, 38, 0.2);
+  }
+}
+
+/* CHARTS */
+
+.pie-chart {
+  height: 300px;
+  line-height: 35px;
+}
+
+.empty-state {
+  font-size: 20px;
+  text-align: center;
+  margin: 10px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}

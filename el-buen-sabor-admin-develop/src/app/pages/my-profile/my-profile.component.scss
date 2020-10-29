@@ -1,0 +1,33 @@
+.header-image {
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  height: 160px;
+  color: white;
+}
+
+.bottom-left {
+  position: absolute;
+  font-size: 34px;
+  bottom: 24px;
+  left: 16px;
+}
+
+img:not(.avatar) {
+  filter: brightness(70%);
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  min-height: 130px;
+}
+
+.avatar {
+  width: 130px;
+  height: 130px;
+  max-height: 130px;
+  line-height: 130px;
+  border-radius: 50%;
+  text-align: center;
+}
+

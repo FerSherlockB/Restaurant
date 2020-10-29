@@ -1,0 +1,163 @@
+<div class="card container col-9 my-5 px-0">
+  <!-- Header -->
+  <div class="header d-flex justify-content-between">
+    <!-- Title -->
+    <div class="row d-flex align-items-center">
+      <mat-icon class="material-icons-outlined circle-icon">{{ icon }}</mat-icon>
+      <h1>{{ title }}</h1>
+      <!-- Button -->
+      <button mat-stroked-button class="ml-3" *ngIf="router" [routerLink]="[router]">
+        {{ routerText }}
+      </button>
+    </div>
+    <div class="row d-flex align-items-center">
+      <!-- Search -->
+      <div class="app-search ml-3">
+        <input matInput placeholder="Buscar..." #input>
+        <mat-icon class="material-icons" matSuffix>search</mat-icon>
+      </div>
+      <!-- Button -->
+      <button mat-flat-button color="primary" class="ml-3" *ngIf="formDialog" (click)="onSubmit({})">
+        <mat-icon class="material-icons" [inline]="true">add</mat-icon> Añadir
+      </button>
+    </div>
+  </div>
+  <hr class="m-0">
+  <div>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+      <mat-progress-bar mode="query" *ngIf="dataSource.loading$ | async"></mat-progress-bar>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="(dataSource.length$ | async) === 0">
+      <mat-icon class="material-icons">{{ icon }}</mat-icon>
+      <span>No se encontraron datos</span>
+    </div>
+
+    <mat-table matSort matSortDisableClear="true" [dataSource]="dataSource"
+      [ngClass]="{'d-none': (dataSource.length$ | async) === 0}">
+      <ng-container *ngFor="let column of tableColumns" [matColumnDef]="column.columnDef" [ngSwitch]="true">
+        <!-- SwitchCase number -->
+        <ng-container
+          *ngSwitchCase="column.columnDef === 'cuil' || column.columnDef === 'ordenes' || column.columnDef === 'id'">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{ column.header  | uppercase }} </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ column.cell(row) | number }} </mat-cell>
+        </ng-container>
+        <!-- SwitchCase currency -->
+        <ng-container
+          *ngSwitchCase="column.columnDef ==='precio' || column.columnDef === 'costo' || column.columnDef === 'total'">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{ column.header  | uppercase }} </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ column.cell(row) | currency:"ARS":"symbol" }} </mat-cell>
+        </ng-container>
+        <!-- SwitchCase imagen -->
+        <ng-container *ngSwitchCase="column.columnDef ==='imagen'">
+          <mat-header-cell *matHeaderCellDef> {{ column.header  | uppercase }} </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <img onerror="this.src='assets/images/cards/card.jpg'" [src]="column.cell(row)">
+          </mat-cell>
+        </ng-container>
+        <!-- SwitchCase shortTime -->
+        <ng-container *ngSwitchCase="column.columnDef === 'horarioEntrega'">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{ column.header  | uppercase }} </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ column.cell(row) | date:'shortTime' }} </mat-cell>
+        </ng-container>
+        <!-- SwitchCase date -->
+        <ng-container *ngSwitchCase="column.columnDef === 'fecha' || column.columnDef === 'fechaAlta'">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{ column.header  | uppercase }} </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ column.cell(row) | date:'short' }} </mat-cell>
+        </ng-container>
+        <!-- SwitchCase public -->
+        <ng-container *ngSwitchCase="column.columnDef === 'oculto'">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{ column.header  | uppercase }} </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <mat-icon class="material-icons" [class]="getPublicClass(row)">stop_circle</mat-icon>
+          </mat-cell>
+        </ng-container>
+        <!-- SwitchCase status -->
+        <ng-container *ngSwitchCase="column.columnDef === 'estado'">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{ column.header  | uppercase }} </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="status-chip ml-1" [class]="getStatusClass(row)"> {{ column.cell(row) | titlecase }} </span>
+          </mat-cell>
+        </ng-container>
+        <!-- SwitchCase category -->
+        <ng-container
+          *ngSwitchCase="column.columnDef === 'categoria' || column.columnDef === 'rubro' || column.columnDef === 'formaPago' || column.columnDef === 'rol'">
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{ column.header  | uppercase }} </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <span class="status-chip ml-1"> {{ column.cell(row) | titlecase }} </span>
+          </mat-cell>
+        </ng-container>
+        <!-- SwitchCase default -->
+        <ng-container *ngSwitchDefault>
+          <mat-header-cell mat-sort-header *matHeaderCellDef> {{ column.header  | uppercase }} </mat-header-cell>
+          <mat-cell *matCellDef="let row"> {{ column.cell(row) }} </mat-cell>
+        </ng-container>
+      </ng-container>
+
+      <!-- Action column -->
+      <ng-container matColumnDef="acciones" *ngIf="formDialog">
+        <mat-header-cell *matHeaderCellDef> ACCIONES </mat-header-cell>
+        <mat-cell *matCellDef="let item" (click)="$event.stopPropagation()">
+          <!-- Action Button -->
+          <button mat-button mat-icon-button matTooltip="More actions" [matMenuTriggerFor]="menu">
+            <mat-icon class="material-icons-outlined">more_horiz</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before" class="px-1">
+            <!-- Update Button -->
+            <button mat-menu-item (click)="onSubmit(item)">
+              <mat-icon class="material-icons app-menu-icon">edit</mat-icon>
+              <span>Editar</span>
+            </button>
+            <!-- Delete Button -->
+            <button mat-menu-item (click)="onDelete(item)">
+              <mat-icon class="material-icons app-menu-icon">delete</mat-icon>
+              <span>Eliminar</span>
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones" *ngIf="title === 'Facturas'">
+        <mat-header-cell *matHeaderCellDef> ACCIONES </mat-header-cell>
+        <mat-cell *matCellDef="let item" (click)="$event.stopPropagation()">
+          <!-- Action Button -->
+          <button mat-button mat-icon-button matTooltip="More actions" [matMenuTriggerFor]="menu">
+            <mat-icon class="material-icons-outlined">more_horiz</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu" xPosition="before" class="px-1">
+            <!-- Send Email Button -->
+            <button mat-menu-item>
+              <mat-icon class="material-icons app-menu-icon">mail_outline</mat-icon>
+              <span>Enviar al cliente</span>
+            </button>
+            <!-- Print Button -->
+            <button mat-menu-item>
+              <mat-icon class="material-icons app-menu-icon">local_printshop</mat-icon>
+              <span>Imprimir</span>
+            </button>
+            <!-- Anular Button -->
+            <button mat-menu-item>
+              <mat-icon class="material-icons app-menu-icon">block</mat-icon>
+              <span>Anular</span>
+            </button>
+          </mat-menu>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row
+        *matHeaderRowDef="formDialog || title === 'Facturas' ? displayedColumns.concat('acciones') : displayedColumns">
+      </mat-header-row>
+      <mat-row class="table-row"
+        *matRowDef="let item; columns: formDialog || title === 'Facturas' ? displayedColumns.concat('acciones') : displayedColumns"
+        (click)="onRead(item)">
+      </mat-row>
+    </mat-table>
+
+    <mat-paginator showFirstLastButtons [length]="dataSource.length$ | async" [pageSize]="8"
+      [pageSizeOptions]="[4, 8, 12]">
+    </mat-paginator>
+  </div>
+</div>

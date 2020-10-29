@@ -1,0 +1,131 @@
+<ng-container *ngIf="invoice != undefined; else elseTemplate">
+  <div class="app-content m-4">
+    <div class="mat-elevation-z8">
+      <div id="invoice" class="app-card">
+        <div class="header">
+          <div class="invoice-date"> {{ invoice.fecha | date:'short' }}</div>
+          <div class="d-flex">
+            <div class="customer flex-fill">
+              <div class="invoice-number">
+                <span class="title">INVOICE</span>
+                <span class="number strong"> {{ invoice.id }} </span>
+              </div>
+              <div class="info">
+                <div class="title"> {{ invoice.orden.cliente.nombre  }} {{ invoice.orden.cliente.apellido }} </div>
+                <div class="address"> {{ address }} </div>
+                <div class="phone"> {{ invoice.orden.cliente.telefono }} </div>
+                <div class="email"> {{ invoice.orden.cliente.email }} </div>
+              </div>
+            </div>
+            <div class="issuer accent flex-fill">
+              <div class="d-flex">
+                <div class="logo">
+                  <img src="assets/images/logos/logo-white.png">
+                </div>
+                <div class="info flex-fill">
+                  <div class="title">EL BUEN SABOR</div>
+                  <div class="address">San Martin 454, Mendoza, 5500 </div>
+                  <div class="phone">+54 261 458 7494</div>
+                  <div class="email">elbuensabor-delivery@outlook.com</div>
+                  <div class="website">www.elbuensabor-delivery.web.app</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pt-5">
+          <mat-table [dataSource]="invoice.orden.detalles">
+            <!-- Product Column -->
+            <ng-container matColumnDef="producto">
+              <mat-header-cell *matHeaderCellDef> PRODUCTO </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                {{ row.articuloManufacturado ? row.articuloManufacturado.denominacion : row.insumo.denominacion }}
+              </mat-cell>
+            </ng-container>
+            <!-- Precio Column -->
+            <ng-container matColumnDef="precio">
+              <mat-header-cell *matHeaderCellDef> PRECIO </mat-header-cell>
+              <mat-cell *matCellDef="let row">
+                {{ row.articuloManufacturado ? ( row.articuloManufacturado.precio | currency:"ARS":"symbol" ) : ( row.insumo.precio  | currency:"ARS":"symbol" ) }}
+              </mat-cell>
+            </ng-container>
+            <!-- Cantidad Column -->
+            <ng-container matColumnDef="cantidad">
+              <mat-header-cell *matHeaderCellDef> CANTIDAD </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{ row.cantidad }} </mat-cell>
+            </ng-container>
+            <!-- Total Column -->
+            <ng-container matColumnDef="total">
+              <mat-header-cell *matHeaderCellDef> TOTAL </mat-header-cell>
+              <mat-cell *matCellDef="let row"> {{ row.precioTotal | currency:"ARS":"symbol" }} </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="invoiceColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: invoiceColumns"></mat-row>
+          </mat-table>
+          <div class="d-flex justify-content-between footer-border">
+            <ng-container *ngIf="invoice.orden.delivery; else enTienda">
+              <div class="d-flex flex-column">
+                <div class="discount-text"> SUBTOTAL </div>
+                <div class="discount-text"> ENVÍO </div>
+              </div>
+              <div class="d-flex flex-column">
+                <div class="discount-text"> {{ subtotal | currency:"ARS":"symbol" }} </div>
+                <div class="discount-text"> {{ '50' | currency:"ARS":"symbol" }} </div>
+              </div>
+            </ng-container>
+            <ng-template #enTienda>
+              <div class="d-flex flex-column">
+                <div class="discount-text"> SUBTOTAL </div>
+                <div class="discount-text"> DESCUENTO </div>
+              </div>
+              <div class="d-flex flex-column">
+                <div class="discount-text"> {{ subtotal | currency:"ARS":"symbol" }} </div>
+                <div class="discount-text"> -{{ invoice.orden.montoDescuento | currency:"ARS":"symbol" }} </div>
+              </div>
+            </ng-template>
+          </div>
+          <div class="d-flex justify-content-between footer">
+            <div class="total-text"> TOTAL </div>
+            <div class="total-text"> {{ invoice.orden.total | currency:"ARS":"symbol" }} </div>
+          </div>
+        </div>
+        <div class="footer pt-5">
+          <div class="mb-4">Gracias por tu compra. </div>
+          <div
+            style="flex-direction: row; box-sizing: border-box; display: flex; place-content: flex-start; align-items: flex-start;">
+            <div class="logo"><img src="assets/images/logos/logo.png"></div>
+            <div class="ml-4">
+              In condimentum malesuada efficitur. Mauris volutpat placerat auctor. Ut ac congue dolor. Quisque
+              scelerisque
+              lacus sed feugiat fermentum. Cras aliquet facilisis pellentesque. Nunc hendrerit quam at leo commodo, a
+              suscipit tellus dapibus. Etiam at felis volutpat est mollis lacinia. Mauris placerat sem sit amet velit
+              mollis, in porttitor ex finibus.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex flex-row-reverse">
+    <button mat-raised-button color="accent" class="invoice-button" (click)="downloadInvoice()">
+      <mat-icon>save_alt</mat-icon> Descargar PDF
+    </button>
+    <button mat-raised-button color="accent" class="invoice-button" [disabled]="isLoading" (click)="uploadInvoice()">
+      <ng-container *ngIf="!isLoading; else elseTemplate">
+        <mat-icon>mail_outline</mat-icon> Enviar Email
+      </ng-container>
+      <ng-template #elseTemplate>
+        <mat-spinner class="mx-5" diameter="20"></mat-spinner>
+      </ng-template>
+    </button>
+  </div>
+</ng-container>
+<ng-template #elseTemplate>
+  <div class="empty-state mb-5">
+    <mat-icon class="material-icons icon">error</mat-icon>
+    <div class="title">Aún no ha generado una factura para esta orden</div>
+    <button mat-flat-button color="primary" class="mt-3" (click)="generateInvoice()">
+      Generar factura
+    </button>
+  </div>
+</ng-template>

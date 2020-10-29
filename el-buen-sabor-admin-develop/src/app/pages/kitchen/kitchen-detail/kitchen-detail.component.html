@@ -1,0 +1,12 @@
+<app-dialog title="Orden N° {{ localData.id | number }}">
+  <mat-tab-group>
+    <mat-tab label="Detalles">
+      <app-user-info [data]="localData.cliente" title='Cliente'></app-user-info>
+      <app-status [data]="localData" [statuses]="statuses"></app-status>
+    </mat-tab>
+    <mat-tab label="Productos">
+      <app-notes [data]="localData.aclaraciones"></app-notes>
+      <app-detail [data]="localData.detalles"></app-detail>
+    </mat-tab>
+  </mat-tab-group>
+</app-dialog>

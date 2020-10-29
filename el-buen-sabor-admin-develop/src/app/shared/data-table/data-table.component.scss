@@ -1,0 +1,118 @@
+/* CARD */
+.card {
+  border-radius: 25px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: lightgray;
+  background-color: #ffffff;
+}
+
+/* HEADER */
+.header {
+  margin: 15px 30px;
+}
+
+h1 {
+  font-size: 32px;
+  margin: 0px;
+}
+
+.app-search {
+  display: flex;
+  flex-direction: row;
+  border-width: 1px;
+  border-style: solid;
+  border-color: lightgrey;
+  padding: 6px 25px;
+  border-radius: 25px;
+}
+
+::ng-deep .app-form-field .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+
+/* EMPTY STATE */
+.empty-state {
+  min-height: 440px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-state .mat-icon {
+  font-size: 90px;
+  height: 90px;
+  width: 90px;
+  color: #0000000f;
+}
+
+.empty-state span {
+  font-size: 18px;
+  font-weight: 500;
+  color: #00000080;
+}
+
+/* TABLE */
+.progress-bar {
+  height: 4px;
+}
+
+.mat-table {
+  min-height: 440px;
+}
+
+.mat-column-acciones {
+  flex: 0 0 90px !important;
+  text-align: center;
+  justify-content: center;
+}
+
+.mat-column-oculto {
+  flex: 0 0 90px !important;
+}
+
+.mat-column-imagen {
+  flex: 0 0 100px !important;
+}
+
+.mat-column-id,
+.mat-column-costo,
+.mat-column-precio,
+.mat-column-telefono,
+.mat-column-cuil {
+  flex: 0 0 120px !important;
+}
+
+.mat-column-cantidad {
+  flex: 0 0 140px !important;
+}
+
+.table-row:hover {
+  background: whitesmoke;
+  cursor: pointer;
+}
+
+.mat-paginator {
+  border-radius: 0 0 25px 25px;
+  border-top: 1px solid lightgrey;
+}
+
+/* BUTTON */
+.mat-flat-button {
+  padding: 0 30px;
+  border-radius: 25px;
+  font-size: 16px;
+}
+
+.app-menu-icon {
+  font-size: 20px;
+}
+
+img {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+}

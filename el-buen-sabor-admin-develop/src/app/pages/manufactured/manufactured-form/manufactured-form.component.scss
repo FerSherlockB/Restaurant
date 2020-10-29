@@ -1,0 +1,34 @@
+img {
+  width: 110px;
+  min-width: 110px;
+  height: 110px;
+  min-height: 110px;
+  border-radius: 50%;
+}
+
+.select-img {
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  min-height: 20px;
+  border-radius: 50%;
+}
+
+.mat-column-cantidad,
+.mat-column-oculto {
+  flex: 0 0 90px !important;
+}
+
+.mat-column-acciones {
+  flex: 0 0 90px !important;
+  text-align: center;
+  justify-content: center;
+}
+
+.edit {
+  color: #43a047 !important;
+}
+
+.delete {
+  color: #e53935 !important;
+}

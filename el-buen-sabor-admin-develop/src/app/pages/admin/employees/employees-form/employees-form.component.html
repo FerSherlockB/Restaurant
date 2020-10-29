@@ -1,0 +1,116 @@
+<app-dialog title=" {{ action }} Empleado ">
+  <mat-horizontal-stepper #stepper>
+    <!-- PASO 1 -->
+    <mat-step label="Información básica">
+      <form [formGroup]="employeesForm" novalidate>
+        <div class="d-flex pb-2">
+          <!-- Nombre Input -->
+          <mat-form-field class="w-100 mr-3">
+            <mat-label>Nombre</mat-label>
+            <input matInput placeholder="Por favor indique el nombre." formControlName="nombre" required>
+            <mat-error *ngIf="errorHandling('nombre', 'required')">
+              El nombre es <strong>obligatorio</strong>.
+            </mat-error>
+          </mat-form-field>
+          <!-- Apellido Input -->
+          <mat-form-field class="w-100">
+            <mat-label>Apellido</mat-label>
+            <input matInput placeholder="Por favor indique el apellido." formControlName="apellido" required>
+            <mat-error *ngIf="errorHandling('apellido', 'required')">
+              El apellido es <strong>obligatorio</strong>.
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Email Input -->
+        <mat-form-field class="w-100 pb-2">
+          <mat-label>Email</mat-label>
+          <input matInput placeholder="Por favor indique el email." formControlName="email" required>
+          <mat-error *ngIf="errorHandling('email', 'required')">
+            El email es <strong>obligatorio</strong>.
+          </mat-error>
+          <mat-error *ngIf="errorHandling('email', 'email')">
+            Ingrese una direccion de email <strong>válida</strong>.
+          </mat-error>
+        </mat-form-field>
+        <!-- Teléfono Input -->
+        <mat-form-field class="w-100 pb-2">
+          <mat-label>Teléfono</mat-label>
+          <input matInput placeholder="Por favor indique el teléfono." formControlName="telefono" required>
+          <mat-error *ngIf="errorHandling('email', 'required')">
+            El teléfono es <strong>obligatorio</strong>.
+          </mat-error>
+        </mat-form-field>
+        <!-- Cuil Input -->
+        <mat-form-field class="w-100 pb-2">
+          <mat-label>Cuil</mat-label>
+          <input matInput placeholder="Por favor indique el cuil." formControlName="cuil" required>
+          <mat-error *ngIf="errorHandling('cuil', 'required')">
+            El cuil es <strong>obligatorio</strong>.
+          </mat-error>
+        </mat-form-field>
+        <!-- Rol Select -->
+        <mat-form-field class="w-100 mr-3">
+          <mat-label>Rol</mat-label>
+          <mat-select formControlName="rol" [compareWith]="compareWith" required>
+            <mat-option *ngFor="let rol of roles" [value]="rol">
+              {{ rol.denominacion | titlecase }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="errorHandling('rol', 'required')">
+            El rol es <strong>obligatorio</strong>.
+          </mat-error>
+        </mat-form-field>
+      </form>
+      <div class="d-flex flex-row-reverse">
+        <button mat-flat-button color="primary" matStepperNext>Siguiente</button>
+      </div>
+    </mat-step>
+    <!-- PASO 2 -->
+    <mat-step label="Completa la dirección">
+      <form [formGroup]="employeesForm" novalidate>
+        <div formGroupName="direccion">
+          <div class="d-flex pb-2">
+            <!-- Calle Input -->
+            <mat-form-field class="flex-grow-1 mr-3">
+              <mat-label>Calle</mat-label>
+              <input matInput placeholder="Por favor indique el nombre de la calle." formControlName="calle" required>
+            </mat-form-field>
+            <!-- Número Input -->
+            <mat-form-field class="flex-shrink-1">
+              <mat-label>Número</mat-label>
+              <input matInput placeholder="Por favor indique el número." formControlName="numero" required>
+            </mat-form-field>
+          </div>
+          <div class="d-flex pb-2">
+            <!-- Piso Input -->
+            <mat-form-field class="w-100 mr-3">
+              <mat-label>Piso</mat-label>
+              <input matInput currencyMask [options]="{ prefix: '', precision: 0, thousands: '.', decimal: ',' }"
+                placeholder="Por favor indique el piso." formControlName="piso">
+            </mat-form-field>
+            <!-- Departamento Input -->
+            <mat-form-field class="w-100">
+              <mat-label>Departamento</mat-label>
+              <input matInput placeholder="Por favor indique el departamento." formControlName="departamento">
+            </mat-form-field>
+          </div>
+          <!-- Localidad Select -->
+          <mat-form-field class="w-100 pb-2">
+            <mat-label>Localidad</mat-label>
+            <mat-select formControlName="localidad" [compareWith]="compareWith" required>
+              <mat-option *ngFor="let localidad of localidades" [value]="localidad">
+                {{ localidad.nombre | titlecase }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+      <div class="d-flex flex-row-reverse">
+        <button mat-flat-button color="primary" [disabled]="!employeesForm.valid" (click)="onAction()">
+          {{ action }}
+        </button>
+        <button mat-button class="mr-2" (click)="onCancel()">Cancel</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</app-dialog>

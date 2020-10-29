@@ -1,0 +1,39 @@
+<app-dialog title=" {{ action }} Detalle ">
+  <form [formGroup]="detailForm" novalidate>
+    <h2 class="mt-3 mb-2">Información básica</h2>
+    <div class="d-flex pb-2">
+      <mat-form-field class="flex-grow-1 w-100 pr-2">
+        <input matInput placeholder="Por favor seleccione el insumo." [matAutocomplete]="autoArticle"
+          formControlName="insumo">
+        <mat-autocomplete #autoArticle="matAutocomplete" [displayWith]="displayArticle">
+          <mat-option *ngIf="isLoading">Loading...</mat-option>
+          <ng-container *ngIf="!isLoading">
+            <mat-option *ngFor="let insumo of filteredArticles" [value]="insumo">
+              <span>{{insumo.denominacion}} </span>
+            </mat-option>
+          </ng-container>
+        </mat-autocomplete>
+      </mat-form-field>
+      <!-- Cantidad Input -->
+      <mat-form-field class="flex-shrink-1 mr-3">
+        <mat-label>Cantidad</mat-label>
+        <input matInput currencyMask [options]="{ prefix: '', precision: 3, thousands: '.', decimal: ',' }"
+          placeholder="Por favor indique la cantidad." formControlName="cantidad" required>
+        <mat-hint> {{ unidad }} </mat-hint>
+        <mat-error *ngIf="errorHandling('cantidad', 'required')">
+          La cantidad es <strong>obligatorio</strong>.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <!-- Oculto Checkbox -->
+    <mat-checkbox class="w-100 pb-2" formControlName="oculto">
+      ¿Desea que el detalle sea privado?
+    </mat-checkbox>
+  </form>
+  <mat-dialog-actions align="end" class="mb-3">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-flat-button color="primary" [disabled]="!detailForm.valid" (click)="onAction()">
+      {{ action }}
+    </button>
+  </mat-dialog-actions>
+</app-dialog>

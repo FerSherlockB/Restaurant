@@ -1,0 +1,32 @@
+<div class="d-flex align-items-center my-3">
+  <span class="d-flex align-items-center subtitle mr-3">
+    <mat-icon class="material-icons-outlined mr-1">access_time</mat-icon>
+    Estado de la orden:
+  </span>
+  <div>
+    <span class="status-chip" [class]="getStatusClass(data.estado.denominacion)">
+      {{ data.estado.denominacion | titlecase }}
+    </span>
+  </div>
+  <div class="flex-grow-1"></div>
+  <span>
+    Entrega: {{ data.horarioEntrega | date:'short' }}
+  </span>
+</div>
+<div class="d-flex flex-fill align-items-center my-4">
+  <div class="mr-2 flex-grow-1">
+    <mat-form-field appearance="outline" class="w-100 no-padding">
+      <mat-label>Estado</mat-label>
+      <mat-select (selectionChange)="changeStatus($event.value)">
+        <mat-option *ngFor="let status of statuses" [value]="status">
+          {{ status.denominacion | titlecase }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div>
+    <button mat-flat-button color="primary" class="ml-3" (click)="updateStatus()">
+      <mat-icon class="material-icons-outlined">refresh</mat-icon> Actualizar
+    </button>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<span class="d-flex align-items-center my-3 subtitle">
+  <mat-icon class="material-icons-outlined mr-1">credit_card</mat-icon>
+  Pago
+</span>
+<mat-table [dataSource]="dataSource" class="mb-4">
+  <!-- Forma de pago Column -->
+  <ng-container matColumnDef="formaPago">
+    <mat-header-cell *matHeaderCellDef> FORMA DE PAGO </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.formaPago | titlecase }} </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <!-- Descuento Column -->
+  <ng-container matColumnDef="montoDescuento">
+    <mat-header-cell *matHeaderCellDef> DESCUENTO </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.delivery ? 'No' : (row.montoDescuento | currency:"ARS":"symbol") }}</mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <!-- Monto Column -->
+  <ng-container matColumnDef="total">
+    <mat-header-cell *matHeaderCellDef> TOTAL </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.total | currency:"ARS":"symbol" }}</mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <!-- Fecha Column -->
+  <ng-container matColumnDef="fecha">
+    <mat-header-cell *matHeaderCellDef> FECHA </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.fecha | date:'short' }}</mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="paymentColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: paymentColumns"></mat-row>
+</mat-table>

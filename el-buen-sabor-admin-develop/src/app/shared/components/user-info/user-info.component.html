@@ -1,0 +1,34 @@
+<span class="d-flex align-items-center my-3 subtitle">
+  <mat-icon class="material-icons-outlined mr-1">account_circle</mat-icon>
+  {{ title }}
+</span>
+<mat-table [dataSource]="dataSource" class="mb-4">
+  <!-- Nombre Column -->
+  <ng-container matColumnDef="nombre">
+    <mat-header-cell *matHeaderCellDef> NOMBRE </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.nombre  }} {{ row.apellido }} </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <!-- Email Column -->
+  <ng-container matColumnDef="email">
+    <mat-header-cell *matHeaderCellDef> EMAIL </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.email }} </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <!-- Teléfono Column -->
+  <ng-container matColumnDef="telefono">
+    <mat-header-cell *matHeaderCellDef> TELÉFONO </mat-header-cell>
+    <mat-cell *matCellDef="let row"> {{ row.telefono }} </mat-cell>
+    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+  </ng-container>
+  <mat-header-row *matHeaderRowDef="customerColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: customerColumns"></mat-row>
+</mat-table>
+
+<div *ngIf="data.rol.denominacion != 'cliente'">
+  <span class="d-flex align-items-center my-3 subtitle">
+    <mat-icon class="material-icons-outlined mr-1">location_on</mat-icon>
+    Domicilio
+  </span>
+  <p class="domicilio mb-5">{{direccion.calle}} {{direccion.numero}}, Piso: {{direccion.piso != null ? direccion.piso : "-"}}  Depto: {{direccion.departamento != null ? direccion.departamento : "-"}}, {{direccion.localidad.nombre}} , {{direccion.localidad.provincia.nombre}} , {{direccion.localidad.provincia.pais.nombre}}</p> 
+</div>

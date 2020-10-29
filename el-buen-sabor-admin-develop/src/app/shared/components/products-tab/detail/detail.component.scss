@@ -1,0 +1,12 @@
+img {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+}
+
+.mat-column-imagen,
+.mat-column-cantidad {
+  flex: 0 0 100px !important;
+}

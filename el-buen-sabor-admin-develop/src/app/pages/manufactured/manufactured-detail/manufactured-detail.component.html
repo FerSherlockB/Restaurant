@@ -1,0 +1,58 @@
+<app-dialog title="Detalle manufacturado">
+  <div class="row py-3 mx-2">
+    <img onerror="this.src='assets/images/cards/card.jpg'" [src]="localData.imagen">
+    <div class="d-flex flex-column align-self-center ml-3">
+      <div class="d-flex align-items-center">
+        <mat-icon class="material-icons mr-2" [class]="getPublicClass()">stop_circle</mat-icon>
+        <div>Codigo {{ localData.id | number }}</div>
+      </div>
+      <h1>{{ localData.denominacion }}</h1>
+      <span class="status-chip">{{ localData.categoria.denominacion }}</span>
+    </div>
+  </div>
+  <div class="d-flex justify-content-around">
+    <div class="d-flex flex-column app-card align-items-center">
+      <span class="head">Precio venta</span>
+      <span class="number">{{ localData.precio | currency:"ARS":"symbol" }}</span>
+    </div>
+    <div class="d-flex flex-column app-card align-items-center">
+      <span class="head">Costo</span>
+      <span class="number">{{ costo | currency:"ARS":"symbol" }}</span>
+    </div>
+    <div class="d-flex flex-column app-card align-items-center">
+      <span class="head">Ganancia</span>
+      <span class="number">{{ (localData.precio - costo) | currency:"ARS":"symbol" }}</span>
+    </div>
+  </div>
+  <h2 class="mt-2">Detalle de preparación</h2>
+  <mat-table [dataSource]="localData.detallesReceta">
+    <!-- Insumo Column -->
+    <ng-container matColumnDef="insumo">
+      <mat-header-cell *matHeaderCellDef> INSUMO </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.insumo.denominacion }} </mat-cell>
+      <mat-footer-cell *matFooterCellDef> Total </mat-footer-cell>
+    </ng-container>
+    <!-- Cantidad Column -->
+    <ng-container matColumnDef="cantidad">
+      <mat-header-cell *matHeaderCellDef> CANTIDAD </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.cantidad }} {{ row.insumo.unidadMedida }}</mat-cell>
+      <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+    </ng-container>
+    <!-- Costo Unitario Column -->
+    <ng-container matColumnDef="costoUnitario">
+      <mat-header-cell *matHeaderCellDef> COSTO UNITARIO </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.insumo.costo | currency:"ARS":"symbol" }} </mat-cell>
+      <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+    </ng-container>
+    <!-- Costo Total Column -->
+    <ng-container matColumnDef="costoTotal">
+      <mat-header-cell *matHeaderCellDef> COSTO TOTAL </mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ costoTotal(row) | currency:"ARS":"symbol" }} </mat-cell>
+      <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+  <div class="table-footer">Última modificación: {{ localData.ultimaActualizacion | date:'medium' }}</div>
+</app-dialog>

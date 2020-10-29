@@ -1,0 +1,54 @@
+<span class="d-flex align-items-center my-3 subtitle">
+  <mat-icon class="material-icons-outlined mr-1">moped</mat-icon>
+  Envío
+</span>
+<ng-container *ngIf="data.delivery; else enTienda">
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Envío: A domicilio </mat-panel-title>
+        <mat-panel-description> {{address}} </mat-panel-description>
+      </mat-expansion-panel-header>
+      <agm-map [latitude]=" data.direccionEntrega.latitud" [longitude]="data.direccionEntrega.longitud" [zoom]="zoom">
+        <agm-marker [latitude]="data.direccionEntrega.latitud" [longitude]="data.direccionEntrega.longitud">
+        </agm-marker>
+      </agm-map>
+    </mat-expansion-panel>
+    <mat-expansion-panel class="mb-4">
+      <mat-expansion-panel-header>
+        <mat-panel-title> Portador </mat-panel-title>
+        <mat-panel-description> {{data.repartidor ? repartidor : ''}} </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="d-flex flex-fill align-items-center mb-4" *ngIf="!data.repartidor">
+        <div class="mr-2 flex-grow-1">
+          <mat-form-field appearance="outline" class="w-100 no-padding">
+            <mat-label>Repartidor</mat-label>
+            <mat-select (selectionChange)="changeCarrier($event.value)">
+              <mat-option *ngFor="let carrier of carriers" [value]="carrier">
+                {{ carrier.nombre }} {{ carrier.apellido }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div>
+          <button mat-flat-button color="primary" class="ml-3" (click)="updateCarrier()">
+            <mat-icon class="material-icons-outlined">refresh</mat-icon> Actualizar
+          </button>
+        </div>
+      </div>
+      <div *ngIf="data.repartidor">
+        <p class="text-muted">
+          Teléfono: {{ data.repartidor.telefono }} - Correo electrónico: {{ data.repartidor.email }}
+        </p>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
+</ng-container>
+<ng-template #enTienda>
+  <mat-expansion-panel hideToggle class="mb-4">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Envío: A retirar </mat-panel-title>
+    </mat-expansion-panel-header>
+    <p>El cliente debe retirar la orden en el local.</p>
+  </mat-expansion-panel>
+</ng-template>
